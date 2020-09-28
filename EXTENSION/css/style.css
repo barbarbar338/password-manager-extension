@@ -1,0 +1,35 @@
+::-webkit-scrollbar {
+    width: 0rem;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+body {
+    width: 35rem;
+    margin: auto;
+    background-color: #2C2F33;
+    border: .2rem solid #999999;
+    border-radius: .4rem;
+}
+
+div {
+    margin: 5rem;
+}
+
+li {
+    word-wrap:break-word;
+}
+
+.mg-1-5 {
+    margin: 1.5rem;
+}
