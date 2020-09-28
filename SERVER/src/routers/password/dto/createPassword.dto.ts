@@ -1,7 +1,6 @@
 import { IsDefined } from "class-validator";
 
 export abstract class CreatePasswordDTO {
-    
     @IsDefined()
     service: string;
 
@@ -10,5 +9,4 @@ export abstract class CreatePasswordDTO {
 
     @IsDefined()
     password: string;
-
 }

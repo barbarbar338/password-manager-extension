@@ -7,11 +7,11 @@ import { AuthModule } from "src/routers/auth/auth.module";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([PasswordEntity]), 
-        forwardRef(() => AuthModule)
+        TypeOrmModule.forFeature([PasswordEntity]),
+        forwardRef(() => AuthModule),
     ],
     controllers: [PasswordController],
     providers: [PasswordService],
-    exports: [TypeOrmModule, PasswordService]
+    exports: [TypeOrmModule, PasswordService],
 })
 export class PasswordModule {}

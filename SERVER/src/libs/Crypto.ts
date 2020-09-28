@@ -2,7 +2,6 @@ import * as crypto from "crypto";
 import config from "src/config";
 
 export class Crypto {
-
     static encrypt(password: string): string {
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv(
@@ -28,5 +27,4 @@ export class Crypto {
         decrypted = Buffer.concat([decrypted, decipher.final()]);
         return decrypted.toString();
     }
-
 }

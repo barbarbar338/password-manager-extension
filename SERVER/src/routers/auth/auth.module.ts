@@ -8,7 +8,7 @@ import { PasswordModule } from "src/routers/password/password.module";
 @Module({
     imports: [
         TypeOrmModule.forFeature([UserEntity]),
-        forwardRef(() => PasswordModule)
+        forwardRef(() => PasswordModule),
     ],
     controllers: [AuthController],
     providers: [AuthService],

@@ -1,7 +1,6 @@
 import { IsDefined, IsOptional } from "class-validator";
 
 export abstract class UpdatePasswordDTO {
-    
     @IsDefined()
     id: string;
 
@@ -10,5 +9,4 @@ export abstract class UpdatePasswordDTO {
 
     @IsOptional()
     password?: string;
-
 }

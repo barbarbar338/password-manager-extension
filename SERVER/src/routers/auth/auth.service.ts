@@ -10,7 +10,7 @@ import config from "src/config";
 import { LoginSignupDTO } from "./dto/login-signup.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./user.entity";
-import { PasswordEntity } from "src/routers/password/password.entity"
+import { PasswordEntity } from "src/routers/password/password.entity";
 import { Crypto } from "src/libs/Crypto";
 import { SnowflakeFactory } from "src/libs/Snowflake";
 
@@ -37,7 +37,7 @@ export class AuthService {
         const user = await this.userRepository.create({
             mail,
             password: Crypto.encrypt(password),
-            id
+            id,
         });
         await this.userRepository.save(user);
         const { access_token, expiresIn } = this.generateToken({

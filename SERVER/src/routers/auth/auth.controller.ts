@@ -9,7 +9,6 @@ import { User } from "./user.decorator";
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    
     @Get("ping")
     returnPing(): APIRes {
         return this.authService.replyPing();
@@ -27,7 +26,9 @@ export class AuthController {
 
     @Delete()
     @UseGuards(AuthGuard)
-    async deleteAccount(@User() user: { mail: string; id: string; }): Promise<APIRes> {
+    async deleteAccount(
+        @User() user: { mail: string; id: string },
+    ): Promise<APIRes> {
         return await this.authService.delete(user.id);
     }
 }
