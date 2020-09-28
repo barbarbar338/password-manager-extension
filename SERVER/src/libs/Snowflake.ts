@@ -58,19 +58,22 @@ export class SnowflakeFactory {
         binary: string;
     } {
         const BINARY = this.idToBinary(snowflake).padStart(64, "0");
+        const timestamp = parseInt(BINARY.substring(0, 42), 2) + EPOCH
         const res = {
-            timestamp: parseInt(BINARY.substring(0, 42), 2) + EPOCH,
+            timestamp,
             workerID: parseInt(BINARY.substring(42, 47), 2),
             processID: parseInt(BINARY.substring(47, 52), 2),
             increment: parseInt(BINARY.substring(52, 64), 2),
             binary: BINARY,
         };
-        Object.defineProperty(res, "date", {
-            get: function get() {
-                return new Date(this.timestamp);
-            },
-            enumerable: true,
-        });
         return res;
     }
+
+    static isSnowflake(snowflake: string): boolean {
+        const deconstructed = this.deconstruct(snowflake);
+        const timestamp = deconstructed.timestamp;
+        if (timestamp > EPOCH && timestamp <= 3619093655551) return true;
+        return false;
+    }
+    
 }
