@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, UseGuards, Delete, Patch } from "@nestjs/common";
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    UseGuards,
+    Delete,
+    Patch,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { APIRes } from "api-types";
 import { LoginSignupDTO } from "./dto/login-signup.dto";
@@ -37,7 +45,7 @@ export class AuthController {
     @UseGuards(AuthGuard)
     async patchAccount(
         @User() user: { mail: string; id: string },
-        @Body() patchDTO: PatchDTO
+        @Body() patchDTO: PatchDTO,
     ): Promise<APIRes> {
         return await this.authService.patchUser(patchDTO, user);
     }

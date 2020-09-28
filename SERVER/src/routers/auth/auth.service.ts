@@ -2,7 +2,7 @@ import {
     Injectable,
     ConflictException,
     BadRequestException,
-    NotFoundException
+    NotFoundException,
 } from "@nestjs/common";
 import { MongoRepository } from "typeorm";
 import { APIRes } from "api-types";
@@ -115,12 +115,13 @@ export class AuthService {
     }
 
     async patchUser(
-        { mail, password }: PatchDTO, 
-        user: { mail: string; id: string }
+        { mail, password }: PatchDTO,
+        user: { mail: string; id: string },
     ): Promise<APIRes> {
         const exist = this.isExists(user.id);
         if (!exist) throw new NotFoundException("User not found");
-        if (!mail && !password) throw new BadRequestException("Mail or password required");
+        if (!mail && !password)
+            throw new BadRequestException("Mail or password required");
         const updateData = {};
         if (mail) updateData["mail"] = mail;
         if (password) updateData["password"] = Crypto.encrypt(password);
@@ -128,7 +129,7 @@ export class AuthService {
         return {
             message: "User updated",
             id: user.id,
-            ...updateData
-        }
+            ...updateData,
+        };
     }
 }
