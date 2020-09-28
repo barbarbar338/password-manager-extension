@@ -58,7 +58,7 @@ export class SnowflakeFactory {
         binary: string;
     } {
         const BINARY = this.idToBinary(snowflake).padStart(64, "0");
-        const timestamp = parseInt(BINARY.substring(0, 42), 2) + EPOCH
+        const timestamp = parseInt(BINARY.substring(0, 42), 2) + EPOCH;
         const res = {
             timestamp,
             workerID: parseInt(BINARY.substring(42, 47), 2),
@@ -75,5 +75,4 @@ export class SnowflakeFactory {
         if (timestamp > EPOCH && timestamp <= 3619093655551) return true;
         return false;
     }
-    
 }

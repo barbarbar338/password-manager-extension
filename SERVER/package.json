@@ -1,8 +1,8 @@
 {
-	"name": "pwd-man-server",
+	"name": "password-manager-server",
 	"version": "0.0.1",
-	"description": "",
-	"author": "",
+	"description": "This project is an experimental project that I have prepared to understand Chrome extensions and do something a little bit useful for me.",
+	"author": "Barış DEMİRCİ",
 	"private": true,
 	"license": "MPL-2.0",
 	"scripts": {
