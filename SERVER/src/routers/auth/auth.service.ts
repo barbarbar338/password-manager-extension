@@ -2,12 +2,14 @@ import {
     Injectable,
     ConflictException,
     BadRequestException,
+    NotFoundException
 } from "@nestjs/common";
 import { MongoRepository } from "typeorm";
 import { APIRes } from "api-types";
 import * as Jwt from "jsonwebtoken";
 import config from "src/config";
 import { LoginSignupDTO } from "./dto/login-signup.dto";
+import { PatchDTO } from "./dto/patch.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./user.entity";
 import { PasswordEntity } from "src/routers/password/password.entity";
@@ -110,5 +112,23 @@ export class AuthService {
         await this.userRepository.findOneAndDelete({ id });
         await this.passwordRepository.deleteMany({ owner: id });
         return { message: "Account deleted" };
+    }
+
+    async patchUser(
+        { mail, password }: PatchDTO, 
+        user: { mail: string; id: string }
+    ): Promise<APIRes> {
+        const exist = this.isExists(user.id);
+        if (!exist) throw new NotFoundException("User not found");
+        if (!mail && !password) throw new BadRequestException("Mail or password required");
+        const updateData = {};
+        if (mail) updateData["mail"] = mail;
+        if (password) updateData["password"] = Crypto.encrypt(password);
+        await this.userRepository.updateOne({ id: user.id }, updateData);
+        return {
+            message: "User updated",
+            id: user.id,
+            ...updateData
+        }
     }
 }
