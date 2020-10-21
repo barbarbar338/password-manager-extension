@@ -1,6 +1,6 @@
 {
     "name": "Password Manager",
-    "version": "1.0",
+    "version": "1.0.0",
     "manifest_version": 2,
     "description": "This project is an experimental project that I have prepared to understand Chrome extensions and do something a little bit useful for me.",
     "browser_action": {
