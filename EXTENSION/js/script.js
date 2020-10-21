@@ -189,6 +189,7 @@ function redirectDashboardPage() {
                             <th scope="col">Service</th>
                             <th scope="col">Login Data</th>
                             <th scope="col">Password</th>
+                            <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
                         </tr>
                     </thead>
@@ -201,7 +202,8 @@ function redirectDashboardPage() {
                     <tr>
                         <td>${i.service}</td>
                         <td>${i.login}</td>
-                        <td><button class="btn btn-outline-warning" data-password-see="${i.id}"><i class="fas fa-eye"></i></button></td>
+                        <td><button class="btn btn-outline-primary" data-password-see="${i.id}"><i class="fas fa-eye"></i></button></td>
+                        <td><button class="btn btn-outline-warning" data-password-edit="${i.id}"><i class="fas fa-pen"></i></button></td>
                         <td><button class="btn btn-outline-danger" data-password-delete="${i.id}"><i class="fas fa-trash"></i></button></td>
                     </tr>
                 `;
@@ -217,8 +219,8 @@ function redirectDashboardPage() {
             createNew.click(function() {
                 handleCreate();
             });
-
             const seePasswordButtons = $("button[data-password-see]");
+            const editPasswordButtons = $("button[data-password-edit]");
             const deletePasswordButtons = $("button[data-password-delete]");
             for (button of seePasswordButtons) {
                 button = $(button);
@@ -227,9 +229,16 @@ function redirectDashboardPage() {
                     seePassword(passwordID);
                 });
             }
+            for (button of editPasswordButtons) {
+                button = $(button);
+                const passwordID = button.data().passwordEdit;
+                button.click(function() {
+                    editPassword(passwordID);
+                });
+            }
             for (button of deletePasswordButtons) {
                 button = $(button);
-                const passwordID = button.data().passwordSee;
+                const passwordID = button.data().passwordDelete;
                 button.click(function() {
                     deletePassword(passwordID);
                 });
@@ -241,14 +250,68 @@ function redirectDashboardPage() {
     });
 }
 
+function handleCreate() {
+    container.html(`
+        <button class="btn btn-outline-primary" id="go-back">Go Back</button><br><br>
+        <form id="add-password-form">
+            <input type="text" class="form-control" placeholder="Service" id="service-data" required><br>
+            <input type="text" class="form-control" placeholder="Login Data" id="login-data" required><br>
+            <input type="password" class="form-control" placeholder="Password" id="password-data" required><br>
+            <button class="btn btn-outline-success">Add</button>
+        </form>
+    `)
+    const goBack = $("#go-back");
+    const addPasswordForm = $("#add-password-form");
+    goBack.click(function() {
+        handleIndex();
+    });
+    addPasswordForm.on("submit", function(e) {
+        e.preventDefault();
+        fetch(API_URL + "/password", {
+            method: "POST",
+            headers: {
+                "Authorization": ACCESS_TOKEN,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                service: $("#service-data").val(),
+                login: $("#login-data").val(),
+                password: $("#password-data").val()
+            })
+        })
+        .then(r => {
+            if (r.ok) return r.json();
+            else createPasswordError();
+        })
+        .then(r => {
+            if (r.error) createPasswordError();
+            else handleIndex();
+        })
+        .catch(createPasswordError);
+    });
+}
+
+function createPasswordError() {
+    container.html(`
+        <div class="alert alert-danger" role="alert">
+            Service, login data and password should not be undefined
+        </div>
+        <button class="btn btn-outline-primary" id="go-back">Go Back</button><br><br>
+    `);
+    const goBack = $("#go-back");
+    goBack.click(function() {
+        handleIndex();
+    });
+}
+
 function seePassword(passwordID) {
     container.html(`See ${passwordID}`);
 }
 
-function deletePassword(passwordID) {
-    container.html(`Delete ${passwordID}`);
+function editPassword(passwordID) {
+    container.html(`Edit ${passwordID}`);
 }
 
-function handleCreate() {
-    container.html("Create new")
+function deletePassword(passwordID) {
+    container.html(`Delete ${passwordID}`);
 }
