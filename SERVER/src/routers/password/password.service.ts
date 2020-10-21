@@ -81,7 +81,7 @@ export class PasswordService {
         if (password) payload["password"] = Crypto.encrypt(password);
         await this.passwordRepository.updateOne(
             { id, owner: user.id },
-            payload,
+            { $set: payload},
         );
         return {
             message: "password data updated",
@@ -114,16 +114,16 @@ export class PasswordService {
         { id }: DeletePasswordDTO,
         user: { mail: string; id: string },
     ): Promise<APIRes> {
-        const passwordData = await this.passwordRepository.findOne({
+        const password = await this.passwordRepository.findOne({
             id,
             owner: user.id,
         });
-        if (!passwordData) throw new BadRequestException("Password not found");
-        delete passwordData._id;
-        passwordData.password = Crypto.decrypt(passwordData.password);
+        if (!password) throw new BadRequestException("Password not found");
+        delete password._id;
+        password.password = Crypto.decrypt(password.password);
         return {
             message: "get one password",
-            passwordData,
+            password,
         };
     }
 }
