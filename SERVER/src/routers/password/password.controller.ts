@@ -6,6 +6,7 @@ import {
     Body,
     Delete,
     Patch,
+    Query,
 } from "@nestjs/common";
 import { PasswordService } from "./password.service";
 import { AuthGuard } from "src/routers/auth/auth.guard";
@@ -24,12 +25,21 @@ export class PasswordController {
         return this.passwordService.replyPing();
     }
 
-    @Get()
+    @Get("all")
     @UseGuards(AuthGuard)
     async getAllPasswords(
         @User() user: { mail: string; id: string },
     ): Promise<APIRes> {
         return this.passwordService.getAllPasswords(user);
+    }
+
+    @Get()
+    @UseGuards(AuthGuard)
+    async getOnePassword(
+        @Query() getOnePasswordDto: DeletePasswordDTO,
+        @User() user: { mail: string; id: string },
+    ): Promise<APIRes> {
+        return this.passwordService.getOnePassword(getOnePasswordDto, user);
     }
 
     @Post()

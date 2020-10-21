@@ -2,6 +2,7 @@ import {
     Injectable,
     NotFoundException,
     NotAcceptableException,
+    BadRequestException,
 } from "@nestjs/common";
 import { APIRes } from "api-types";
 import { CreatePasswordDTO } from "./dto/createPassword.dto";
@@ -106,6 +107,23 @@ export class PasswordService {
         return {
             message: "get all passwords",
             passwords: payload,
+        };
+    }
+
+    async getOnePassword(
+        { id }: DeletePasswordDTO,
+        user: { mail: string; id: string },
+    ): Promise<APIRes> {
+        const passwordData = await this.passwordRepository.findOne({
+            id,
+            owner: user.id,
+        });
+        if (!passwordData) throw new BadRequestException("Password not found");
+        delete passwordData._id;
+        passwordData.password = Crypto.decrypt(passwordData.password);
+        return {
+            message: "get one password",
+            passwordData,
         };
     }
 }

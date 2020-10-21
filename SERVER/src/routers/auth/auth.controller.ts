@@ -49,4 +49,10 @@ export class AuthController {
     ): Promise<APIRes> {
         return await this.authService.patchUser(patchDTO, user);
     }
+
+    @Get("access_token_test")
+    @UseGuards(AuthGuard)
+    testAccessToken(): APIRes {
+        return this.authService.replyPing();
+    }
 }
